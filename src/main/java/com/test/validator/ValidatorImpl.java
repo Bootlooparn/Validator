@@ -12,6 +12,7 @@ public class ValidatorImpl implements Validator{
     }
     @Override
     public boolean isNull(String input) {
+        // Check if null
         return input == null;
     }
 
@@ -46,13 +47,13 @@ public class ValidatorImpl implements Validator{
 
     @Override
     public boolean isVechicleRegistrationNumber(String vechiclenr) {
+        //Check if length is 6 and if the first three characters are letters and if the last the characters are integers
         vechiclenr = cleanupVehiclenr(vechiclenr);
         if (vechiclenr.length() != 6) {
             log.info("{} -- vehicle number is not valid, not appropiate length", vechiclenr);
             return false;
         }
 
-        //Check if length is 6 and if the first three characters are letters and if the last the characters are integers
         if (!vechiclenr.substring(0, 3).matches("[a-zA-Z]+") && !vechiclenr.substring(3).matches("[0-9]+")) {
             log.info("{} -- vehicle number is most likely not a valid swedish vechicle number", vechiclenr);
             return false;
@@ -61,6 +62,7 @@ public class ValidatorImpl implements Validator{
     }
 
     private boolean luhn(String luhnInput) {
+        // Do the Luhn
         int checksum = Character.getNumericValue(luhnInput.charAt(luhnInput.length() - 1));
         int sum = 0;
 
@@ -72,10 +74,6 @@ public class ValidatorImpl implements Validator{
                 sum += Character.getNumericValue(luhnInput.charAt(i));
             }
         }
-
-        int step1 = sum % 10;
-        int step2 = 10 - step1;
-        int step3 = step2 % 10;
 
         return checksum - (10 - (sum % 10)) % 10 == 0;
     }
